@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaughn's Tattoos | Discover Custom Ink Art</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black:wght@400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loading-text">Vaughn's Tattoos</div>
+    </div>
+
+    <!-- Navigation -->
+   <nav>
+    <div class="container nav-container">
+        <!-- Logo now redirects to homepage -->
+        <a href="#" class="logo" onclick="showPage('home')">Vaughn's Tattoos</a>
+        <ul class="nav-links" id="navLinks">
+            <!-- Removed Home tab -->
+            <li><a href="#" onclick="showPage('about')">About Me</a></li>
+            <li><a href="#" onclick="showPage('styles')">Styles</a></li>
+            <li><a href="#" onclick="showPage('booking')">Booking Process</a></li>
+            <li><a href="#" class="nav-book-now-button" onclick="showPage('book-now')">Book Now</a></li>
+
+        </ul>
+        <div class="hamburger" onclick="toggleNav()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</nav>
+
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Page -->
+        <div id="home" class="page active">
+    <!-- Sectión 1 -->
+    <section class="split-section">
+        <div class="split left">
+            <h1 style="text-transform: uppercase;">Tattoos<br>that<br>inspire</h1>
+        </div>
+        <div class="split right">
+            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_9976.jpeg" alt="Tattoo Image" class="responsive-img">
+        </div>
+    </section>
+
+    <!-- Banner -->
+    <section class="banner">
+        <div class="banner-messages" id="bannerMessages">
+            <span>Creativity</span>
+            <span> - </span>
+            <span>Talent</span>
+            <span> - </span>
+            <span>Sketch</span>
+            <span> - </span>
+            <span>Needle</span>
+            <span> - </span>
+            <span>Memory</span>
+            <span> - </span>
+            <span>Creativity</span>
+            <span> - </span>
+            <span>Talent</span>
+            <span> - </span>
+            <span>Sketch</span>
+            <span> - </span>
+            <span>Needle</span>
+            <span> - </span>
+            <span>Memory</span>
+        </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="split-section">
+        <div class="split left">
+            <h1>FOR VAUGHN,</h1>
+        </div>
+        <div class="split right">
+            <p>Every piece is custom, every line is intentional, and every session is built on good energy.<br><br>
+            From clean traditionals to anime-inspired designs, we turn your ideas into art you’ll wear forever.</p>
+        </div>
+    </section>
+    <!-- Get to Know Me -->
+    <div class="get-to-know-me-container">
+        <a href="#" class="get-to-know-me-button" onclick="showPage('about')">Get to Know Me</a>
+    </div>
+</div>
+
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <section class="about-section">
+                    <video class="video-background" autoplay muted loop playsinline>
+                     <source src="videos/homepage 2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+
+
+                <div class="about-overlay">
+                    <h2>Vaughn Raffty L.</h2>
+                    <p><strong>Self-taught tattoo artist based in Peoria, Illinois.</strong></p>
+                    <p><strong>Drawing since childhood and tattooing at 16.</strong></p>
+                    <p><strong>Style inspired by youth, nostalgia, and expression.</strong></p>
+                <!-- Look at my Work Button -->
+                    <div class="look-work-container">
+                        <a href="#" class="look-work-button" onclick="showPage('styles')">Look at my Work</a>
+                    </div>
+                </div>
+
+
+            </section>
+        </div>
+
+        <!-- Styles Page -->
+        <div id="styles" class="page">
+            <section class="styles-section">
+                <div class="container">
+                    <div class="styles-header">
+                        <h2>FROM BOLD LINES TO SOFT GRADIENTS</h2>
+                        <p>Vaughn specializes in a range of tattoo styles designed to match your story and vision.</p>
+                    </div>
+
+                    <div class="style-item">
+                        <h3>ANIME/ILLUSTRATIVE</h3>
+                        <p>Ink that blends character, emotion, and style.</p>
+                        <div class="gallery-roulette">
+                            <!-- Placeholder images - replace with your actual gallery images -->
+                            <img src="images/ANIME:ILLUSTRATIVE/att.zxL2AkC7hC9jSfKCsvf11qgW_o3mjgaED2FBbBkb8Dg.jpeg" alt="Anime tattoo 1">
+                            <img src="images/ANIME:ILLUSTRATIVE/IMG_0100.jpeg" alt="Anime tattoo 2">
+                            <img src="images/ANIME:ILLUSTRATIVE/IMG_0465.jpeg" alt="Anime tattoo 3">
+                            <img src="images/ANIME:ILLUSTRATIVE/IMG_0565.jpeg" alt="Anime tattoo 4">
+                            <img src="images/ANIME:ILLUSTRATIVE/IMG_0649.jpeg" alt="Anime tattoo 5">
+                            <img src="images/ANIME:ILLUSTRATIVE/IMG_0724.jpeg" alt="Anime tattoo 6">
+                            <img src="images/ANIME:ILLUSTRATIVE/IMG_1078.jpeg" alt="Anime tattoo 7">
+                            <img src="images/ANIME:ILLUSTRATIVE/IMG_1799.jpeg" alt="Anime tattoo 8">
+                        </div>
+                    </div>
+
+                    <div class="style-item">
+                        <h3>TRADITIONAL</h3>
+                        <p>Clean lines, bold colors, and timeless symbolism.</p>
+                        <div class="gallery-roulette">
+                            <img src="images/TRADITIONAL/IMG_0149.jpeg" alt="Traditional tattoo 1">
+                            <img src="images/TRADITIONAL/IMG_0241.jpeg" alt="Traditional tattoo 2">
+                            <img src="images/TRADITIONAL/IMG_0699.jpeg" alt="Traditional tattoo 3">
+                            <img src="images/TRADITIONAL/IMG_0712.jpeg" alt="Traditional tattoo 4">
+                            <img src="images/TRADITIONAL/IMG_0863.jpeg" alt="Traditional tattoo 5">
+                            <img src="images/TRADITIONAL/IMG_1282.jpeg" alt="Traditional tattoo 6">
+                            <img src="images/TRADITIONAL/IMG_9402.jpeg" alt="Traditional tattoo 7">
+                            <img src="images/TRADITIONAL/IMG_9440.jpeg" alt="Traditional tattoo 8">
+                        </div>
+                    </div>
+
+                    <div class="style-item">
+                        <h3>BLACK & GRAY - STIPPLE SHADING</h3>
+                        <p>Clean dotwork that adds texture & depth.</p>
+                        <div class="gallery-roulette">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_0386.jpeg" alt="Black and gray tattoo 1">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_0504.jpeg" alt="Black and gray tattoo 2">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_0555.jpeg" alt="Black and gray tattoo 3">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_0613.jpeg" alt="Black and gray tattoo 4">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_0669.jpeg" alt="Black and gray tattoo 5">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_0986.jpeg" alt="Black and gray tattoo 6">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_1246.jpeg" alt="Black and gray tattoo 7">
+                            <img src="images/BLACK&GREY:STIPPLE SHADING/IMG_1444.jpeg" alt="Black and gray tattoo 8">
+                        </div>
+                    </div>
+
+                    <div class="style-item">
+                        <h3>LINE WORK</h3>
+                        <p>Quiet tattoos for loud minds.</p>
+                        <div class="gallery-roulette">
+                            <img src="images/LINE WORK/IMG_0005.jpeg" alt="Line work tattoo 1">
+                            <img src="images/LINE WORK/IMG_0332.jpeg" alt="Line work tattoo 2">
+                            <img src="images/LINE WORK/IMG_0490.jpeg" alt="Line work tattoo 3">
+                            <img src="images/LINE WORK/IMG_0957.jpeg" alt="Line work tattoo 4">
+                            <img src="images/LINE WORK/IMG_0965.jpeg" alt="Line work tattoo 5">
+                            <img src="images/LINE WORK/IMG_1708.jpeg" alt="Line work tattoo 6">
+                            <img src="images/LINE WORK/IMG_1873.jpeg" alt="Line work tattoo 7">
+                            <img src="images/LINE WORK/IMG_8583.jpeg" alt="Line work tattoo 8">
+                        </div>
+                    </div>
+                    <!-- Book a Session Button -->
+                    <div class="book-session-container">
+                        <a href="#" class="book-session-button" onclick="showPage('book-now')">Book a Session</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Booking Process Page -->
+        <div id="booking" class="page">
+            <section class="booking-section">
+                <div class="container">
+                    <div class="booking-header">
+                        <h2>BOOKING PROCESS</h2>
+                    </div>
+
+                    <div class="booking-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <p>Fill out the form we made for you to kickstart the process for your next tattoo. Each request is reviewed personally to make sure we fully understand your vision.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <p>You'll receive a follow-up message to clarify your concept, confirm the style, and provide a personalized quote based on the design's complexity and estimated time.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <p>Once you're ready to move forward, a non-refundable deposit is required to lock in your appointment. This goes toward your final cost and secures your design time.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <p>A custom design will be prepared based on the details you provide. Minor adjustments can be made before or on the day of your session to make sure everything feels just right.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <p>Arrive on time, well-rested, and hydrated. You'll walk in with an idea — and walk out with permanent art made just for you.</p>
+                            </div>
+                        </div>
+
+                        <!-- Ready to Get Started Button -->
+                        <div class="get-started-container">
+                            <a href="#" class="get-started-button" onclick="showPage('book-now')">Ready to get Started?</a>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Book Now Page -->
+        <div id="book-now" class="page">
+            <section class="book-now-section">
+                <div class="container">
+                    <h2>READY TO GET STARTED?</h2>
+                    <div class="tally-embed">
+                        <iframe src="https://tally.so/embed/mBV7g5" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" title="Tattoo Booking Form"></iframe>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <a href="mailto:vaughnstattoos@yahoo.com">vaughnstattoos@yahoo.com</a>
+            </div>
+            <div class="footer-section">
+                <h3>Location</h3>
+                <p>22201 IL Route 9<br>Tremont, IL 61568<br>United States</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow</h3>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/vlr_inks?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 2 .2 2.5.4.6.2 1.1.5 1.5.9.4.4.7.9.9 1.5.2.5.3 1.3.4 2.5.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 2-.4 2.5-.2.6-.5 1.1-.9 1.5-.4.4-.9.7-1.5.9-.5.2-1.3.3-2.5.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-2-.2-2.5-.4-.6-.2-1.1-.5-1.5-.9-.4-.4-.7-.9-.9-1.5-.2-.5-.3-1.3-.4-2.5C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-2 .4-2.5.2-.6.5-1.1.9-1.5.4-.4.9-.7 1.5-.9.5-.2 1.3-.3 2.5-.4C8.4 2.2 8.8 2.2 12 2.2zm0-2.2C8.7 0 8.3 0 7.1.1 5.8.2 4.8.4 4 .7 3.2 1 2.5 1.4 1.9 2c-.6.6-1 1.3-1.3 2.1-.3.8-.5 1.8-.6 3.1C0 8.3 0 8.7 0 12s0 3.7.1 4.9c.1 1.3.3 2.3.6 3.1.3.8.7 1.5 1.3 2.1.6.6 1.3 1 2.1 1.3.8.3 1.8.5 3.1.6 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c1.3-.1 2.3-.3 3.1-.6.8-.3 1.5-.7 2.1-1.3.6-.6 1-1.3 1.3-2.1.3-.8.5-1.8.6-3.1.1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.1-1.3-.3-2.3-.6-3.1-.3-.8-.7-1.5-1.3-2.1-.6-.6-1.3-1-2.1-1.3-.8-.3-1.8-.5-3.1-.6C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8.1 4 4 0 0 1 0 8.1zm6.4-10.5a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=100061157032387&ref=_ig_profile_ac" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82V14.708h-3.29v-3.62h3.29V8.414c0-3.262 1.994-5.043 4.907-5.043 1.396 0 2.595.104 2.944.15v3.41h-2.02c-1.584 0-1.892.754-1.892 1.86v2.44h3.785l-.493 3.62h-3.292V24h6.455c.73 0 1.324-.593 1.324-1.324V1.325C24 .593 23.407 0 22.675 0z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@vlr_inks" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                             <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Vaughn Raffty L. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
