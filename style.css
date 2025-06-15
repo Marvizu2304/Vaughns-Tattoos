@@ -82,7 +82,7 @@ nav {
 .nav-book-now-button {
     background-color: var(--cream);
     color: var(--darkest-brown) !important;
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 0.8rem;
     border-radius: 25px;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -247,11 +247,11 @@ main {
 .get-to-know-me-button {
     background-color: #574C3F;
     color: #ECE4DA;
-    padding: 1.5rem 4rem; /* Doubled padding */
+    padding: 1rem 3rem; /* Doubled padding */
     border-radius: 25px;
     text-decoration: none;
     font-family: 'Archivo Black', sans-serif;
-    font-size: 2rem; /* Doubled font size */
+    font-size: 1.5rem; /* Doubled font size */
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
 }
@@ -293,13 +293,13 @@ main {
 
 .about-overlay h2 {
     font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
-    margin-bottom: 1rem;
+    font-size: clamp(1rem, 3vw, 2.5rem); /* Responsive font size */
+    margin-bottom: 1.2rem;
     color: #B9A590; /* Second custom color */
 }
 
 .about-overlay p {
-    font-size: 1.3rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
     color: #ECE4DA; /* Consistent text color */
 }
@@ -313,11 +313,11 @@ main {
 .look-work-button {
     background-color: #ECE4DA;
     color: #574C3F;
-    padding: 1.25rem 2.75rem;
+    padding: 0.5rem 2rem;
     border-radius: 25px;
     text-decoration: none;
     font-family: 'Archivo Black', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
 }
