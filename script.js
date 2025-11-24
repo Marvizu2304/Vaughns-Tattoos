@@ -1,246 +1,426 @@
-// Loading screen
-window.addEventListener('load', function() {
-    setTimeout(() => {
-        document.getElementById('loading').classList.add('hidden');
-    }, 1500);
-});
+/**
+ * Vaughn's Tattoos - Interactive Experience Script
+ * Updated to support Magnetic Buttons, SPA transitions, and Smooth Reveals.
+ */
 
-// Navigation
-function showPage(pageId) {
-    // Hide all pages
-    const pages = document.querySelectorAll('.page');
-    pages.forEach(page => page.classList.remove('active'));
+// State Management
+let scrollObserver = null;
+let activePageId = 'home';
 
-    // Show selected page
-    document.getElementById(pageId).classList.add('active');
+// 1. Initialization & Preloader
+window.addEventListener('load', () => {
+    const loader = document.querySelector('.preloader');
+    const counter = document.querySelector('.counter');
+    let count = 0;
 
-    // Close mobile nav if open
-    document.getElementById('navLinks').classList.remove('active');
-}
+    // Disable scroll during load
+    document.body.style.overflow = 'hidden';
 
-function toggleNav() {
-    document.getElementById('navLinks').classList.toggle('active');
-}
+    const interval = setInterval(() => {
+        count += Math.floor(Math.random() * 10) + 1;
+        if (count > 100) count = 100;
+        counter.innerText = count + '%';
 
-// Gallery image click handler (for future lightbox functionality)
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.gallery-roulette img').forEach(img => {
-        img.addEventListener('click', function() {
-            // Add lightbox functionality here if needed
-            console.log('Image clicked:', this.src);
-        });
-    });
-
-    // Smooth scroll for gallery roulettes
-    document.querySelectorAll('.gallery-roulette').forEach(gallery => {
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        gallery.addEventListener('mousedown', (e) => {
-            isDown = true;
-            startX = e.pageX - gallery.offsetLeft;
-            scrollLeft = gallery.scrollLeft;
-        });
-
-        gallery.addEventListener('mouseleave', () => {
-            isDown = false;
-        });
-
-        gallery.addEventListener('mouseup', () => {
-            isDown = false;
-        });
-
-        gallery.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - gallery.offsetLeft;
-            const walk = (x - startX) * 2;
-            gallery.scrollLeft = scrollLeft - walk;
-        });
-    });
-});
-
-// Close mobile nav when clicking outside
-document.addEventListener('click', function(event) {
-    const nav = document.getElementById('navLinks');
-    const hamburger = document.querySelector('.hamburger');
-
-    if (!nav.contains(event.target) && !hamburger.contains(event.target)) {
-        nav.classList.remove('active');
-    }
-});
-
-// Smooth page transitions
-function smoothTransition(pageId) {
-    const currentPage = document.querySelector('.page.active');
-    const targetPage = document.getElementById(pageId);
-
-    if (currentPage === targetPage) return;
-
-    // Fade out current page
-    currentPage.style.opacity = '0';
-
-    setTimeout(() => {
-        currentPage.classList.remove('active');
-        targetPage.classList.add('active');
-        targetPage.style.opacity = '0';
-
-        // Fade in new page
-        setTimeout(() => {
-            targetPage.style.opacity = '1';
-        }, 50);
-    }, 300);
-}
-
-// Enhanced gallery functionality with touch support
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.gallery-roulette').forEach(gallery => {
-        let startX = 0;
-        let scrollLeft = 0;
-        let isDown = false;
-
-        // Mouse events
-        gallery.addEventListener('mousedown', (e) => {
-            isDown = true;
-            gallery.classList.add('dragging');
-            startX = e.pageX - gallery.offsetLeft;
-            scrollLeft = gallery.scrollLeft;
-        });
-
-        gallery.addEventListener('mouseleave', () => {
-            isDown = false;
-            gallery.classList.remove('dragging');
-        });
-
-        gallery.addEventListener('mouseup', () => {
-            isDown = false;
-            gallery.classList.remove('dragging');
-        });
-
-        gallery.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - gallery.offsetLeft;
-            const walk = (x - startX) * 2;
-            gallery.scrollLeft = scrollLeft - walk;
-        });
-
-        // Touch events for mobile
-        gallery.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].pageX - gallery.offsetLeft;
-            scrollLeft = gallery.scrollLeft;
-        });
-
-        gallery.addEventListener('touchmove', (e) => {
-            const x = e.touches[0].pageX - gallery.offsetLeft;
-            const walk = (x - startX) * 1.5;
-            gallery.scrollLeft = scrollLeft - walk;
-        });
-    });
-});
-
-// Form validation and enhancement (if needed for future features)
-function validateContactForm(form) {
-    const email = form.querySelector('input[type="email"]');
-    const message = form.querySelector('textarea');
-
-    if (email && !email.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-        alert('Please enter a valid email address');
-        return false;
-    }
-
-    if (message && message.value.length < 10) {
-        alert('Please enter a message with at least 10 characters');
-        return false;
-    }
-
-    return true;
-}
-
-
-// Scroll animations
-function handleScrollAnimations() {
-    const elements = document.querySelectorAll('.fade-in');
-
-    elements.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const elementVisible = 150;
-
-        if (elementTop < window.innerHeight - elementVisible) {
-            element.classList.add('active');
-        }
-    });
-}
-
-window.addEventListener('scroll', handleScrollAnimations);
-
-// Keyboard navigation support
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        // Close mobile menu if open
-        document.getElementById('navLinks').classList.remove('active');
-    }
-
-    // Arrow key navigation for galleries
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-        const activeGallery = document.querySelector('.gallery-roulette:hover');
-        if (activeGallery) {
-            const scrollAmount = 250;
-            if (e.key === 'ArrowLeft') {
-                activeGallery.scrollLeft -= scrollAmount;
-            } else {
-                activeGallery.scrollLeft += scrollAmount;
-            }
-        }
-    }
-});
-
-// Performance monitoring
-function logPerformance() {
-    if ('performance' in window) {
-        window.addEventListener('load', () => {
+        if (count === 100) {
+            clearInterval(interval);
             setTimeout(() => {
-                const timing = performance.timing;
-                const loadTime = timing.loadEventEnd - timing.navigationStart;
-                console.log(`Page load time: ${loadTime}ms`);
-            }, 0);
+                // Fade out loader
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+
+                // Enable scroll
+                document.body.style.overflow = '';
+
+                // Initialize App features
+                initScrollAnimations();
+                initMagneticButtons();
+                initParallax();
+                initLightbox();
+
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500);
+            }, 500);
+        }
+    }, 30);
+});
+
+// 2. Custom Cursor Logic (Enhanced)
+const cursorDot = document.querySelector('[data-cursor-dot]');
+const cursorOutline = document.querySelector('[data-cursor-outline]');
+
+window.addEventListener('mousemove', (e) => {
+    const posX = e.clientX;
+    const posY = e.clientY;
+
+    // Dot follows instantly
+    // We add translate(-50%, -50%) to maintain the center anchor
+    cursorDot.style.transform = `translate(${posX}px, ${posY}px) translate(-50%, -50%)`;
+
+    // Outline follows with smooth lag
+    // We also add translate(-50%, -50%) here to keep the outline centered around the dot
+    cursorOutline.animate({
+        transform: `translate(${posX}px, ${posY}px) translate(-50%, -50%)`
+    }, { duration: 500, fill: "forwards" });
+});
+
+// Hover effects for cursor
+const addHoverListeners = () => {
+    // Added specific selectors like .logo and input fields if you have them
+    const hoverables = document.querySelectorAll('a, button, .menu-toggle, .grid-item, .btn-magnetic, input, textarea, .logo');
+    hoverables.forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+};
+addHoverListeners(); // Run initially
+
+// 3. Magnetic Buttons Logic
+// Applies physics to elements with class .btn-magnetic
+function initMagneticButtons() {
+    const magnets = document.querySelectorAll('.btn-magnetic');
+    const width = window.innerWidth;
+
+    // Disable on mobile to prevent scroll issues
+    if(width < 768) return;
+
+    magnets.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            // Move the button slightly towards the mouse (strength factor 0.5)
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+
+            // Move the text/span inside slightly more for depth effect
+            const span = btn.querySelector('span');
+            if(span) {
+                span.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+            }
         });
+
+        btn.addEventListener('mouseleave', () => {
+            // Snap back to center
+            btn.style.transform = 'translate(0px, 0px)';
+            const span = btn.querySelector('span');
+            if(span) span.style.transform = 'translate(0px, 0px)';
+        });
+    });
+}
+
+// 4. Navigation Toggle
+function toggleNav() {
+    const overlay = document.getElementById('navOverlay');
+    const menuToggle = document.querySelector('.menu-toggle');
+
+    overlay.classList.toggle('active');
+    menuToggle.classList.toggle('open'); // Optional: Add CSS for hamburger animation
+
+    // Prevent body scroll when menu is open
+    if(overlay.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
     }
 }
 
-// Initialize performance monitoring
-logPerformance();
+// 5. SPA Page Navigation
+function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    const overlay = document.getElementById('navOverlay');
 
-// Lazy Load Images using IntersectionObserver
-// -------------------------------------------
-// This script delays loading of images until they are about to enter the viewport,
-// reducing initial page load time and improving performance.
-// It works by swapping `data-src` to `src` when the image is visible.
-// If the browser doesn't support IntersectionObserver, it loads all images immediately.
+    if (overlay.classList.contains('active')) {
+        toggleNav();
+    }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const lazyImages = document.querySelectorAll("img.lazy");
+    if (activePageId === pageId) return;
 
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          img.src = img.dataset.src;
-          img.classList.remove("lazy");
-          observer.unobserve(img);
+    // --- NEW: Stop animation if leaving book-now ---
+    if (activePageId === 'book-now') {
+        stopInkAnimation();
+    }
+
+    activePageId = pageId;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    pages.forEach(page => {
+        if (page.id === pageId) {
+            setTimeout(() => {
+                page.classList.add('active');
+
+                // --- NEW: Start animation if entering book-now ---
+                if (pageId === 'book-now') {
+                    // Slight delay to ensure div is visible for sizing
+                    setTimeout(startInkAnimation, 100);
+                }
+
+                // Existing re-initialization...
+                setTimeout(() => {
+                    initScrollAnimations();
+                    initMagneticButtons();
+                    addHoverListeners();
+                    initLightbox();
+                    window.dispatchEvent(new Event('scroll'));
+                }, 100);
+            }, 300);
+        } else {
+            page.classList.remove('active');
         }
-      });
     });
+}
 
-    lazyImages.forEach(img => observer.observe(img));
-  } else {
-    // Fallback for older browsers that don’t support IntersectionObserver
-    lazyImages.forEach(img => {
-      img.src = img.dataset.src;
-      img.classList.remove("lazy");
+// 6. Scroll Reveal Animation (Enhanced)
+function initScrollAnimations() {
+    // Disconnect previous observer if exists to avoid duplicates
+    if (scrollObserver) scrollObserver.disconnect();
+
+    const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 // Trigger when 15% visible
+    };
+
+    scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Optional: Stop observing once revealed
+                // scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, options);
+
+    const elementsToReveal = document.querySelectorAll('.reveal-text, .fade-in-up, .grid-item, .hero-title, .big-statement');
+    elementsToReveal.forEach(el => {
+        scrollObserver.observe(el);
     });
-  }
+}
+
+// 7. Parallax & Marquee Logic
+function initParallax() {
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+
+        // Hero Parallax
+        const heroImg = document.querySelector('.hero-image-parallax img');
+        if (heroImg && document.getElementById('home').classList.contains('active')) {
+            heroImg.style.transform = `scale(1.1) translateY(${scrollY * 0.2}px)`;
+        }
+
+        // Marquee Speedup
+        const marqueeContent = document.querySelector('.marquee-content');
+        if (marqueeContent && document.getElementById('home').classList.contains('active')) {
+            // Move marquee slightly based on scroll to create dynamic speed
+            marqueeContent.style.transform = `translateX(-${scrollY * 0.5}px)`;
+        }
+    });
+}
+
+// 8. Gallery Filtering
+const filterButtons = document.querySelectorAll('.filter-btn');
+const gridItems = document.querySelectorAll('.grid-item');
+
+filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Update Active State
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const filter = button.dataset.filter;
+
+        gridItems.forEach(item => {
+            // Reset animation class to allow re-triggering
+            item.classList.remove('visible');
+
+            if (filter === 'all' || item.classList.contains(filter)) {
+                item.style.display = 'block';
+                // Small timeout to allow display:block to apply before adding visible class
+                setTimeout(() => item.classList.add('visible'), 50);
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 });
 
+// 9. Lazy Load Images
+document.addEventListener("DOMContentLoaded", () => {
+    const lazyImages = document.querySelectorAll("img.lazy");
+
+    if ("IntersectionObserver" in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+
+                    img.onload = () => {
+                        img.classList.remove("lazy");
+                        img.classList.add("loaded"); // Add loaded class for CSS transition
+                    };
+
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+
+        lazyImages.forEach(img => imageObserver.observe(img));
+    } else {
+        // Fallback
+        lazyImages.forEach(img => {
+            img.src = img.dataset.src;
+            img.classList.remove("lazy");
+        });
+    }
+});
+
+// 10. Lightbox Logic
+function initLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector('.lightbox-close');
+
+    // Seleccionamos todas las imágenes dentro de grid-items
+    // Usamos delegación de eventos o re-asignamos listeners
+    const images = document.querySelectorAll('.grid-item img');
+
+    images.forEach(img => {
+        // Aseguramos que el cursor muestre que es clickeable
+        img.style.cursor = 'pointer';
+
+        img.addEventListener('click', () => {
+            const src = img.getAttribute('src');
+            // Si la imagen no ha cargado (lazy), usamos data-src
+            const finalSrc = src || img.getAttribute('data-src');
+
+            lightboxImg.src = finalSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Bloquear scroll
+        });
+    });
+
+    // Función para cerrar
+    const closeLightbox = () => {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; // Habilitar scroll
+
+        // Limpiar src después de la transición para evitar parpadeos
+        setTimeout(() => {
+            lightboxImg.src = '';
+        }, 400);
+    };
+
+    // Event Listeners para cerrar
+    closeBtn.addEventListener('click', closeLightbox);
+
+    // Cerrar al hacer clic fuera de la imagen (en el fondo oscuro)
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
+            closeLightbox();
+        }
+    });
+
+    // Cerrar con la tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+}
+
+/* --- DYNAMIC INK CANVAS --- */
+const canvas = document.getElementById('ink-canvas');
+const ctx = canvas.getContext('2d');
+let particlesArray = [];
+let canvasAnimationId; // To stop animation when leaving page
+
+// Resize canvas to fit the section
+function resizeCanvas() {
+    const parent = document.querySelector('.book-now-section');
+    if(parent) {
+        canvas.width = parent.offsetWidth;
+        canvas.height = parent.offsetHeight;
+    }
+}
+
+// Track mouse relative to canvas
+const mouse = { x: undefined, y: undefined };
+const bookSection = document.querySelector('.book-now-section');
+
+// Event listener specifically for the section
+bookSection.addEventListener('mousemove', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+
+    // Spawn particles on move
+    for(let i = 0; i < 3; i++){
+        particlesArray.push(new Particle());
+    }
+});
+
+class Particle {
+    constructor(){
+        this.x = mouse.x;
+        this.y = mouse.y;
+        // Random size between 1 and 4
+        this.size = Math.random() * 3 + 1;
+        // Random speed/direction mimicking splatter
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+        // Color variation: mostly black/ink, some accent gold
+        this.color = Math.random() > 0.9 ? '#B9A590' : '#1a1a1a';
+    }
+    update(){
+        this.x += this.speedX;
+        this.y += this.speedY;
+        // Shrink particle to simulate fading ink
+        if (this.size > 0.1) this.size -= 0.05;
+    }
+    draw(){
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function handleParticles(){
+    for(let i = 0; i < particlesArray.length; i++){
+        particlesArray[i].update();
+        particlesArray[i].draw();
+
+        // Remove tiny particles
+        if(particlesArray[i].size <= 0.3){
+            particlesArray.splice(i, 1);
+            i--;
+        }
+    }
+}
+
+function animateCanvas(){
+    // Slightly clear the canvas to create a trail effect
+    // changing the 0.1 opacity controls the length of the trail
+    ctx.fillStyle = 'rgba(246, 243, 236, 0.2)'; // Using your var(--bg-color)
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    handleParticles();
+    canvasAnimationId = requestAnimationFrame(animateCanvas);
+}
+
+// --- INTEGRATION HELPERS ---
+
+// Call this when entering the "book-now" page
+function startInkAnimation() {
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    animateCanvas();
+}
+
+// Call this when leaving the "book-now" page
+function stopInkAnimation() {
+    window.removeEventListener('resize', resizeCanvas);
+    cancelAnimationFrame(canvasAnimationId);
+    particlesArray = []; // Clean up memory
+}
