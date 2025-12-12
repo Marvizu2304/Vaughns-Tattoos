@@ -146,15 +146,14 @@ function showPage(pageId) {
 
     pages.forEach(page => {
         if (page.id === pageId) {
+            // Fade IN the new page (delayed)
             setTimeout(() => {
                 page.classList.add('active');
-
                 // --- NEW: Start animation if entering book-now ---
                 if (pageId === 'book-now') {
                     // Slight delay to ensure div is visible for sizing
                     setTimeout(startInkAnimation, 100);
                 }
-
                 // Existing re-initialization...
                 setTimeout(() => {
                     initScrollAnimations();
@@ -165,7 +164,16 @@ function showPage(pageId) {
                 }, 100);
             }, 300);
         } else {
-            page.classList.remove('active');
+            // OPTIONAL CHANGE: If the page is currently active, fade it out first
+            if(page.classList.contains('active')){
+                page.style.opacity = '0'; // Visually fade out
+                setTimeout(() => {
+                    page.classList.remove('active'); // Hide from DOM after fade
+                    page.style.opacity = ''; // Reset opacity for next time
+                }, 300); // Match this delay with the timeout above
+            } else {
+                page.classList.remove('active');
+            }
         }
     });
 }
