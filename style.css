@@ -27,6 +27,19 @@ body {
     font-family: var(--font-body);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+
+    /* --- ADD THESE 3 LINES --- */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- ADD THIS NEW RULE --- */
+main {
+    /* This forces main to grow and fill any empty vertical space,
+       keeping the footer pinned at the bottom even during transitions */
+    flex: 1;
+    width: 100%; /* Ensures it stays full width */
 }
 
 /* --- CURSOR PERSONALIZADO --- */
