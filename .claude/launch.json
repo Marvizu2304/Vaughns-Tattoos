@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "vrl-site",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "-l", "4173", "-s", "."],
+      "port": 4173
+    },
+    {
+      "name": "vrl-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "-l", "4174", "."],
+      "port": 4174
+    }
+  ]
+}

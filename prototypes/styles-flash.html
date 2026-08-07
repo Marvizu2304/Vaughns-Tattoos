@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototipo — Índice tipográfico + hoja de flash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Paleta idéntica a la del sitio */
+:root{
+  --bg-color:#F6F3EC; --text-main:#1a1a1a; --text-muted:#574C3F; --accent:#B9A590; --white:#fff;
+  --ink-10:rgba(26,26,26,.10); --ink-60:rgba(26,26,26,.6);
+  --font-head:'Archivo Black',sans-serif; --font-body:'Space Grotesk',sans-serif;
+  --easing:cubic-bezier(.19,1,.22,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg-color);color:var(--text-main);font-family:var(--font-body);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;text-align:left}
+:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
+
+.tag{position:fixed;top:16px;right:20px;z-index:60;font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text-muted);border:1px solid var(--ink-10);
+  padding:6px 12px;border-radius:99px;background:var(--bg-color)}
+
+/* ============ ÍNDICE ============ */
+.index-stage{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding:96px 5vw 64px}
+
+.eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--text-muted);
+  margin-bottom:40px;display:flex;align-items:center;gap:14px}
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--ink-10)}
+
+.style-index{list-style:none;border-top:1px solid var(--ink-10)}
+.style-row{display:flex;align-items:baseline;gap:clamp(14px,2.5vw,34px);width:100%;
+  padding:clamp(14px,2.2vw,26px) 0;border-bottom:1px solid var(--ink-10);position:relative}
+
+/* Regla de acento que se traza bajo la fila activa. GSAP no puede tocar una
+   pseudo-clase, así que anima --bar en la fila y el ::after la consume. */
+.style-row::after{content:'';position:absolute;left:0;bottom:-1px;width:100%;height:2px;
+  background:var(--accent);transform:scaleX(var(--bar,0));transform-origin:left center}
+
+.row-num{font-size:.72rem;letter-spacing:.1em;color:var(--accent);flex:none;width:2.4em;
+  font-variant-numeric:tabular-nums}
+.row-name{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,4.4rem);line-height:.95;
+  text-transform:uppercase;letter-spacing:-.02em;flex:1;will-change:transform}
+.row-count{font-size:.8rem;color:var(--text-muted);flex:none;font-variant-numeric:tabular-nums}
+.row-count::before{content:'—';margin-right:.6em;color:var(--accent)}
+
+/* ============ PILA QUE SIGUE AL CURSOR ============ */
+.preview-stack{position:fixed;top:0;left:0;z-index:40;pointer-events:none;
+  width:clamp(170px,17vw,260px);aspect-ratio:3/4;visibility:hidden}
+.preview-stack img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  border-radius:4px;box-shadow:0 18px 44px rgba(26,26,26,.28);
+  margin:-50% 0 0 -50%;will-change:transform}
+
+/* ============ VISTA DE ESTILO ============ */
+.style-view{position:fixed;inset:0;z-index:50;background:var(--bg-color);
+  overflow-y:auto;padding:88px 5vw 96px;visibility:hidden}
+.view-bar{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  margin-bottom:8px}
+.back-btn{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);
+  display:inline-flex;align-items:center;gap:10px;padding:10px 0}
+.back-btn:hover{color:var(--text-main)}
+.back-btn span{display:inline-block;transition:transform .3s var(--easing)}
+.back-btn:hover span{transform:translateX(-5px)}
+.view-count{font-size:.75rem;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.view-title{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,4.4rem);line-height:.95;
+  text-transform:uppercase;letter-spacing:-.02em;margin-bottom:44px;transform-origin:left top}
+/* ============ HOJA DE FLASH ============ */
+/* La lámina: papel con grano, clavada sobre el fondo del sitio. */
+.sheet{position:relative;background:var(--white);padding:clamp(18px,3vw,44px);
+  border:1px solid var(--ink-10);border-radius:2px;
+  box-shadow:0 24px 60px rgba(26,26,26,.10), 0 2px 6px rgba(26,26,26,.06);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(87,76,63,.035) 0 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(87,76,63,.03) 0 1px, transparent 1px);
+  background-size:11px 11px, 17px 17px}
+
+/* Chinchetas en las cuatro esquinas de la lámina */
+.sheet::before,.sheet::after{content:'';position:absolute;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);box-shadow:0 2px 4px rgba(26,26,26,.28)}
+.sheet::before{top:14px;left:14px}
+.sheet::after{top:14px;right:14px}
+
+/* Densidad: 15 columnas y filas cortas, con empaquetado denso. Los spans
+   están calculados para que cada tamaño caiga en proporción de retrato, que
+   es como vienen las fotos de tatuaje; con filas más altas salían cuadradas. */
+.view-grid{display:grid;grid-template-columns:repeat(15,1fr);
+  grid-auto-rows:clamp(26px,3.6vw,48px);grid-auto-flow:dense;gap:clamp(8px,1vw,14px)}
+
+.view-grid figure{overflow:hidden;border-radius:3px;background:var(--ink-10);
+  will-change:transform;position:relative;
+  box-shadow:0 6px 16px rgba(26,26,26,.16);
+  transform:rotate(var(--tilt,0deg));
+  transition:box-shadow .45s var(--easing)}
+.view-grid img{width:100%;height:100%;object-fit:cover}
+
+/* Al mirar una pieza, se endereza y sube: el gesto de descolgarla del muro */
+.view-grid figure:hover,.view-grid figure:focus-within{z-index:5;
+  box-shadow:0 22px 48px rgba(26,26,26,.30)}
+
+/* Tamaños del ritmo de la lámina */
+.size-xl{grid-column:span 6;grid-row:span 10}
+.size-l {grid-column:span 5;grid-row:span 8}
+.size-m {grid-column:span 4;grid-row:span 6}
+.size-s {grid-column:span 4;grid-row:span 5}
+.size-xs{grid-column:span 3;grid-row:span 4}
+
+@media (max-width:900px){
+  .view-grid{grid-template-columns:repeat(6,1fr)}
+  .size-xl{grid-column:span 6;grid-row:span 9}
+  .size-l {grid-column:span 6;grid-row:span 8}
+  .size-m {grid-column:span 3;grid-row:span 5}
+  .size-s {grid-column:span 3;grid-row:span 4}
+  .size-xs{grid-column:span 3;grid-row:span 4}
+}
+
+@media (max-width:768px){
+  .index-stage{padding-top:80px}
+  .row-count{display:none}
+  .sheet::before,.sheet::after{display:none}
+}
+/* Sin cursor no hay pila que seguir */
+@media (hover:none){ .preview-stack{display:none} }
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .preview-stack{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="tag">Prototipo · Índice + hoja de flash</div>
+
+<main class="index-stage">
+  <p class="eyebrow">Four styles, one hand</p>
+  <ul class="style-index" id="styleIndex"></ul>
+</main>
+
+<div class="preview-stack" id="previewStack" aria-hidden="true"></div>
+
+<section class="style-view" id="styleView" aria-hidden="true">
+  <div class="view-bar">
+    <button class="back-btn" id="backBtn" type="button"><span>&larr;</span> All styles</button>
+    <span class="view-count" id="viewCount"></span>
+  </div>
+  <h2 class="view-title" id="viewTitle"></h2>
+  <div class="sheet">
+    <div class="view-grid" id="viewGrid"></div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  gsap.registerPlugin(Flip, CustomEase);
+  CustomEase.create('needle', '0.16, 1, 0.3, 1');
+  CustomEase.create('ink', '0.62, 0.05, 0.16, 1');
+
+  var STYLES = [{"cat":"anime","name":"Anime / Illustrative","items":["att.zxl2akc7hc9jsfkcsvf11qgw_o3mjgaed2fbbbkb8dg","img_0100","img_0465","img_0565","img_0649","img_0724","img_1078","img_1799","img_1852","img_7540-2","img_7544-2","img_7545-2","img_7629","img_7633","img_7634","img_9135","img_9183","img_9281","img_9433","img_9779"]},{"cat":"traditional","name":"Traditional","items":["img_0149","img_0241","img_0699","img_0712","img_0863","img_1282","img_7542-2","img_7631","img_9402","img_9440","img_9768"]},{"cat":"blackgrey","name":"Black &amp; Grey","items":["img_0386","img_0504","img_0555","img_0613","img_0669","img_0986","img_1246","img_1444","img_7632","img_9976"]},{"cat":"linework","name":"Line Work","items":["img_0005","img_0332","img_0490","img_0957","img_0965","img_1708","img_1873","img_7543-2","img_8583","img_9065"]}];
+
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  var indexEl   = document.getElementById('styleIndex');
+  var stackEl   = document.getElementById('previewStack');
+  var viewEl    = document.getElementById('styleView');
+  var viewTitle = document.getElementById('viewTitle');
+  var viewGrid  = document.getElementById('viewGrid');
+  var viewCount = document.getElementById('viewCount');
+  var backBtn   = document.getElementById('backBtn');
+
+  var src = function (cat, base, w) { return '../images/optimized/' + cat + '/' + base + '-' + w + '.webp'; };
+
+  /* ---------- Construcción del índice ---------- */
+
+  var rows = STYLES.map(function (s, i) {
+    var li = document.createElement('li');
+    li.innerHTML =
+      '<button class="style-row" type="button" data-cat="' + s.cat + '">' +
+        '<span class="row-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span class="row-name">' + s.name + '</span>' +
+        '<span class="row-count">' + s.items.length + ' pieces</span>' +
+      '</button>';
+    indexEl.appendChild(li);
+    return li.firstChild;
+  });
+
+  /* ---------- Pila que sigue al cursor ---------- */
+
+  var LAYERS = 4;
+  var ROTATIONS = [-7, 5, -3, 8];
+  var layers = [];
+  var follow = [];
+
+  for (var i = 0; i < LAYERS; i++) {
+    var img = document.createElement('img');
+    img.alt = '';
+    stackEl.appendChild(img);
+    layers.push(img);
+    gsap.set(img, { rotate: ROTATIONS[i], scale: 0.86, autoAlpha: 0 });
+    // Cada capa persigue al cursor con su propio retardo: eso es lo que crea
+    // la sensación de baraja arrastrada.
+    follow.push({
+      x: gsap.quickTo(img, 'x', { duration: 0.3 + i * 0.12, ease: 'power3' }),
+      y: gsap.quickTo(img, 'y', { duration: 0.3 + i * 0.12, ease: 'power3' })
+    });
+  }
+
+  var hovering = null;
+  var offset = 0;
+  var cycleId = null;
+
+  function paintStack(style) {
+    for (var i = 0; i < LAYERS; i++) {
+      var item = style.items[(offset + i) % style.items.length];
+      layers[i].src = src(style.cat, item, 800);
+    }
+  }
+
+  function enterStack(style) {
+    hovering = style;
+    offset = 0;
+    paintStack(style);
+    gsap.set(stackEl, { visibility: 'visible' });
+    // 'auto' y no true: overwrite:true mataría los tweens de quickTo que
+    // mueven x/y, y la pila dejaría de seguir al cursor tras el primer hover.
+    gsap.to(layers, { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'needle', stagger: 0.04, overwrite: 'auto' });
+
+    clearInterval(cycleId);
+    cycleId = setInterval(function () {
+      offset = (offset + LAYERS) % style.items.length;
+      paintStack(style);
+    }, 900);
+  }
+
+  function leaveStack() {
+    hovering = null;
+    clearInterval(cycleId);
+    gsap.to(layers, {
+      autoAlpha: 0, scale: 0.86, duration: 0.3, ease: 'power2.in', overwrite: 'auto',
+      onComplete: function () { gsap.set(stackEl, { visibility: 'hidden' }); }
+    });
+  }
+
+  if (finePointer && !reduced) {
+    window.addEventListener('mousemove', function (e) {
+      if (!hovering) return;
+      for (var i = 0; i < LAYERS; i++) { follow[i].x(e.clientX); follow[i].y(e.clientY); }
+    }, { passive: true });
+  }
+
+  /* ---------- Estados de fila ---------- */
+
+  function setActive(row, name, on) {
+    if (reduced) {
+      row.style.setProperty('--bar', on ? 1 : 0);
+      return;
+    }
+
+    gsap.to(name, { x: on ? 28 : 0, duration: 0.5, ease: 'needle' });
+    gsap.to(row, { '--bar': on ? 1 : 0, duration: 0.45, ease: 'needle' });
+    gsap.to(row.querySelector('.row-num'), { color: on ? '#1a1a1a' : '#B9A590', duration: 0.3 });
+
+    // Las demás filas se apagan para que la elegida mande
+    rows.forEach(function (other) {
+      if (other !== row) gsap.to(other, { opacity: on ? 0.28 : 1, duration: 0.35 });
+    });
+  }
+
+  rows.forEach(function (row, i) {
+    var style = STYLES[i];
+    var name = row.querySelector('.row-name');
+
+    row.addEventListener('pointerenter', function () {
+      if (!finePointer) return;
+      setActive(row, name, true);
+      if (!reduced) enterStack(style);
+    });
+
+    row.addEventListener('pointerleave', function () {
+      if (!finePointer) return;
+      setActive(row, name, false);
+      if (!reduced) leaveStack();
+    });
+
+    // El teclado recibe el mismo trato que el ratón, sin la pila
+    row.addEventListener('focus', function () { setActive(row, name, true); });
+    row.addEventListener('blur', function () { setActive(row, name, false); });
+
+    row.addEventListener('click', function () { openStyle(style, name); });
+  });
+
+  /* ---------- Apertura de un estilo ---------- */
+
+  var isOpen = false;
+
+  // Ritmo de tamaños de la lámina. No es aleatorio: se repite para que la
+  // composición sea la misma en cada visita y se pueda juzgar.
+  var RHYTHM = ['l', 'm', 's', 'xl', 'xs', 'm', 's', 'm', 'l', 's', 'xs', 'm', 's', 'l', 'm', 'xs'];
+  var TILTS = [-2.2, 1.4, -0.9, 2.6, -1.7, 0.8, -2.8, 1.9, -1.2, 2.2, -0.6, 1.6];
+
+  function buildGrid(style) {
+    viewGrid.innerHTML = '';
+    style.items.forEach(function (item, i) {
+      var fig = document.createElement('figure');
+      fig.className = 'size-' + RHYTHM[i % RHYTHM.length];
+      fig.style.setProperty('--tilt', TILTS[i % TILTS.length] + 'deg');
+
+      var img = document.createElement('img');
+      img.src = src(style.cat, item, 800);
+      img.loading = i < 8 ? 'eager' : 'lazy';
+      img.decoding = 'async';
+      img.alt = style.name + ' tattoo ' + (i + 1);
+      fig.appendChild(img);
+      viewGrid.appendChild(fig);
+    });
+
+    if (reduced || !finePointer) return;
+
+    // Enderezar al pasar por encima. En JS y no en CSS porque la rotación en
+    // reposo vive en --tilt y una transición de transform pelearía con el
+    // stagger de entrada.
+    viewGrid.querySelectorAll('figure').forEach(function (fig) {
+      var tilt = parseFloat(fig.style.getPropertyValue('--tilt'));
+      fig.addEventListener('pointerenter', function () {
+        gsap.to(fig, { rotate: 0, scale: 1.045, duration: 0.5, ease: 'needle', overwrite: 'auto' });
+      });
+      fig.addEventListener('pointerleave', function () {
+        gsap.to(fig, { rotate: tilt, scale: 1, duration: 0.6, ease: 'needle', overwrite: 'auto' });
+      });
+    });
+  }
+
+  function openStyle(style, fromEl) {
+    if (isOpen) return;
+    isOpen = true;
+
+    leaveStack();
+    viewTitle.textContent = style.name;
+    viewCount.textContent = style.items.length + ' pieces';
+    buildGrid(style);
+
+    viewEl.setAttribute('aria-hidden', 'false');
+    gsap.set(viewEl, { visibility: 'visible' });
+
+    if (reduced) {
+      gsap.set(viewEl, { autoAlpha: 1 });
+      backBtn.focus();
+      return;
+    }
+
+    var figures = viewGrid.querySelectorAll('figure');
+
+    gsap.timeline()
+      // El índice se retira hacia arriba
+      .to(rows, { yPercent: -60, autoAlpha: 0, duration: 0.5, ease: 'ink', stagger: 0.04 }, 0)
+      .fromTo(viewEl, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.25)
+      // El nombre elegido viaja desde su fila hasta la cabecera
+      .add(function () {
+        Flip.fit(viewTitle, fromEl, { scale: true });
+        gsap.to(viewTitle, { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.85, ease: 'power3.inOut' });
+      }, 0.25)
+      // Las piezas caen sobre la lámina y se asientan en su inclinación.
+      // La rotación final la pone GSAP: si la dejara en el transform del CSS,
+      // el primer tween de y la borraría.
+      .fromTo(figures,
+        {
+          autoAlpha: 0, y: -46, scale: 0.9,
+          rotate: function (i, el) { return parseFloat(el.style.getPropertyValue('--tilt')) * 4; }
+        },
+        {
+          autoAlpha: 1, y: 0, scale: 1,
+          rotate: function (i, el) { return parseFloat(el.style.getPropertyValue('--tilt')); },
+          duration: 0.85, ease: 'needle', stagger: { amount: 0.6, from: 'start' }
+        }, 0.5)
+      .fromTo([backBtn, viewCount], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.6)
+      .add(function () { backBtn.focus({ preventScroll: true }); });
+  }
+
+  function closeStyle() {
+    if (!isOpen) return;
+    isOpen = false;
+    viewEl.setAttribute('aria-hidden', 'true');
+
+    function done() {
+      gsap.set(viewEl, { visibility: 'hidden' });
+      viewGrid.innerHTML = '';
+    }
+
+    if (reduced) { done(); gsap.set(rows, { autoAlpha: 1, yPercent: 0 }); return; }
+
+    gsap.timeline({ onComplete: done })
+      .to(viewEl, { autoAlpha: 0, duration: 0.45, ease: 'ink' }, 0)
+      .to(rows, { yPercent: 0, autoAlpha: 1, duration: 0.6, ease: 'needle', stagger: 0.05 }, 0.15);
+  }
+
+  backBtn.addEventListener('click', closeStyle);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen) closeStyle();
+  });
+
+  /* ---------- Entrada ---------- */
+
+  if (!reduced) {
+    gsap.from('.eyebrow', { autoAlpha: 0, y: 16, duration: 0.6, delay: 0.15 });
+    gsap.from(rows, { yPercent: 110, autoAlpha: 0, duration: 1, ease: 'needle', stagger: 0.08, delay: 0.2 });
+  }
+})();
+</script>
+</body>
+</html>

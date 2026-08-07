@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banco de pruebas — Cuatro tratamientos para Styles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-color:#F6F3EC; --text-main:#1a1a1a; --text-muted:#574C3F; --accent:#B9A590; --white:#fff;
+  --ink-10:rgba(26,26,26,.10);
+  --font-head:'Archivo Black',sans-serif; --font-body:'Space Grotesk',sans-serif;
+  --easing:cubic-bezier(.19,1,.22,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg-color);color:var(--text-main);font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+  transition:background-color .6s var(--easing),color .6s var(--easing)}
+img{display:block;max-width:100%}
+button,select{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+/* ============ BARRA DE CONTROL ============ */
+.bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;
+  gap:clamp(12px,2vw,32px);padding:14px clamp(16px,4vw,44px);
+  border-bottom:1px solid var(--ink-10);background:var(--bg-color);
+  transition:background-color .6s var(--easing),border-color .6s var(--easing)}
+body.is-dark .bar{background:var(--text-main);border-color:rgba(246,243,236,.14)}
+body.is-dark{background:var(--text-main);color:var(--bg-color)}
+
+.bar-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);flex:none}
+body.is-dark .bar-label{color:var(--accent)}
+
+.tabs{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.tab{font-size:.76rem;letter-spacing:.04em;padding:8px 14px;border-radius:99px;
+  border:1px solid transparent;opacity:.55;transition:opacity .3s,border-color .3s,background-color .3s}
+.tab:hover{opacity:.9}
+.tab[aria-pressed="true"]{opacity:1;border-color:var(--accent);background:rgba(185,165,144,.16)}
+
+.style-select{font-size:.76rem;padding:8px 12px;border:1px solid var(--ink-10);
+  border-radius:99px;cursor:pointer}
+body.is-dark .style-select{border-color:rgba(246,243,236,.2);background:var(--text-main);
+  color:var(--bg-color)}
+
+.hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:100;
+  font-size:.68rem;letter-spacing:.1em;color:var(--text-muted);text-align:center;
+  padding:8px 18px;border-radius:99px;background:rgba(246,243,236,.9);pointer-events:none}
+body.is-dark .hint{background:rgba(26,26,26,.8);color:var(--accent)}
+
+/* ============ ESCENARIO ============ */
+.stage{position:fixed;inset:64px 0 0;overflow-y:auto;overflow-x:hidden;
+  padding:clamp(20px,3vw,44px) clamp(16px,4vw,44px) 80px}
+.stage.no-scroll{overflow:hidden;padding:0;display:flex;align-items:center}
+
+/* ---- 1. MURO OSCURO CON FOCO ---- */
+/* Las fotos ya traen fondo oscuro: sobre tinta sus bordes se disuelven y solo
+   queda el tatuaje. El foco es lo que decide qué mirar. */
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:6px;grid-auto-rows:1fr}
+.wall .piece{position:relative;aspect-ratio:3/4;overflow:hidden;
+  --near:0;
+  filter:grayscale(calc(100% - 100% * var(--near))) brightness(calc(.38 + .62 * var(--near)));
+  transform:scale(calc(1 + .035 * var(--near)));z-index:calc(1 + var(--near) * 10)}
+.wall .piece img{width:100%;height:100%;object-fit:cover}
+
+/* ---- 2. HOJA DE CONTACTOS ---- */
+.contact{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(130px,13vw,180px),1fr));
+  gap:clamp(10px,1.4vw,20px)}
+.contact .frame{position:relative}
+.contact .piece{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:2px;
+  background:var(--ink-10);filter:grayscale(1) contrast(1.08);
+  transition:filter .5s var(--easing),box-shadow .5s var(--easing);
+  transform-origin:center}
+.contact .piece img{width:100%;height:100%;object-fit:cover}
+.contact .frame:hover .piece,.contact .frame:focus-within .piece{
+  filter:grayscale(0) contrast(1);box-shadow:0 18px 40px rgba(26,26,26,.26)}
+.contact .frame-no{display:block;margin-top:7px;font-size:.62rem;letter-spacing:.12em;
+  color:var(--text-muted);font-variant-numeric:tabular-nums}
+.contact .frame:hover .frame-no{color:var(--accent)}
+
+/* ---- 3. TIRA HORIZONTAL ---- */
+.strip-wrap{width:100%;overflow:hidden;cursor:grab}
+.strip-wrap:active{cursor:grabbing}
+.strip{display:flex;gap:clamp(12px,1.6vw,26px);width:max-content;padding:0 12vw;
+  will-change:transform}
+.strip .piece{flex:none;width:clamp(220px,26vw,400px);aspect-ratio:3/4;overflow:hidden;
+  border-radius:3px;background:var(--ink-10);will-change:transform}
+.strip .piece img{width:100%;height:100%;object-fit:cover}
+
+/* ---- 4. MOSAICO DE DETALLE ---- */
+/* La miniatura enseña solo tinta; el contexto es la recompensa del hover. */
+.detail{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,15vw,210px),1fr));
+  gap:clamp(8px,1vw,14px)}
+.detail .piece{position:relative;aspect-ratio:1;overflow:hidden;border-radius:3px;
+  background:var(--ink-10)}
+.detail .piece img{width:100%;height:100%;object-fit:cover;transform:scale(2.1);
+  transform-origin:center 42%;transition:transform .7s var(--easing)}
+.detail .piece:hover img,.detail .piece:focus-within img{transform:scale(1)}
+.detail .piece::after{content:'';position:absolute;inset:0;border:1px solid rgba(246,243,236,.18);
+  border-radius:3px;pointer-events:none}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important}
+  .wall .piece{--near:1}
+  .detail .piece img{transform:scale(1)}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="bar-label">Tratamiento</span>
+  <div class="tabs" id="tabs" role="group" aria-label="Tratamiento de galería"></div>
+  <select class="style-select" id="styleSelect" aria-label="Estilo"></select>
+</div>
+
+<div class="stage" id="stage"></div>
+<div class="hint" id="hint"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  gsap.registerPlugin(CustomEase);
+  CustomEase.create('needle', '0.16, 1, 0.3, 1');
+
+  var STYLES = [{"cat":"anime","name":"Anime / Illustrative","short":"ANI","items":["att.zxl2akc7hc9jsfkcsvf11qgw_o3mjgaed2fbbbkb8dg","img_0100","img_0465","img_0565","img_0649","img_0724","img_1078","img_1799","img_1852","img_7540-2","img_7544-2","img_7545-2","img_7629","img_7633","img_7634","img_9135","img_9183","img_9281","img_9433","img_9779"]},{"cat":"traditional","name":"Traditional","short":"TRD","items":["img_0149","img_0241","img_0699","img_0712","img_0863","img_1282","img_7542-2","img_7631","img_9402","img_9440","img_9768"]},{"cat":"blackgrey","name":"Black & Grey","short":"BLG","items":["img_0386","img_0504","img_0555","img_0613","img_0669","img_0986","img_1246","img_1444","img_7632","img_9976"]},{"cat":"linework","name":"Line Work","short":"LNW","items":["img_0005","img_0332","img_0490","img_0957","img_0965","img_1708","img_1873","img_7543-2","img_8583","img_9065"]}];
+
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stage   = document.getElementById('stage');
+  var tabsEl  = document.getElementById('tabs');
+  var selectEl= document.getElementById('styleSelect');
+  var hintEl  = document.getElementById('hint');
+
+  function src(cat, base) { return '../images/optimized/' + cat + '/' + base + '-800.webp'; }
+
+  function makePiece(style, item, i) {
+    var d = document.createElement('div');
+    d.className = 'piece';
+    d.tabIndex = 0;
+    var img = document.createElement('img');
+    img.src = src(style.cat, item);
+    img.loading = i < 10 ? 'eager' : 'lazy';
+    img.decoding = 'async';
+    img.alt = style.name + ' tattoo ' + (i + 1);
+    d.appendChild(img);
+    return d;
+  }
+
+  /* =====================================================
+     1. MURO OSCURO CON FOCO
+     ===================================================== */
+
+  function buildWall(style) {
+    document.body.classList.add('is-dark');
+    stage.className = 'stage';
+
+    var grid = document.createElement('div');
+    grid.className = 'wall';
+    var pieces = style.items.map(function (item, i) {
+      var p = makePiece(style, item, i);
+      grid.appendChild(p);
+      return p;
+    });
+    stage.appendChild(grid);
+
+    if (reduced) return function () {};
+
+    var rects = [];
+    var near = pieces.map(function () { return 0; });
+    var pointer = { x: -9999, y: -9999 };
+    var RADIUS = 300;
+
+    function measure() {
+      rects = pieces.map(function (p) {
+        var r = p.getBoundingClientRect();
+        return { cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
+      });
+    }
+    measure();
+
+    function onMove(e) { pointer.x = e.clientX; pointer.y = e.clientY; }
+    function onLeave() { pointer.x = pointer.y = -9999; }
+
+    // El valor se suaviza por frame en vez de tweenear 20 filtros a la vez:
+    // escribir una variable CSS es mucho más barato que crear tweens.
+    function tick() {
+      for (var i = 0; i < pieces.length; i++) {
+        var r = rects[i];
+        if (!r) continue;
+        var dx = pointer.x - r.cx, dy = pointer.y - r.cy;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        var target = Math.max(0, 1 - d / RADIUS);
+        target = target * target;                       // caída más marcada
+        near[i] += (target - near[i]) * 0.14;           // suavizado
+        if (near[i] < 0.001) near[i] = 0;
+        pieces[i].style.setProperty('--near', near[i].toFixed(3));
+      }
+    }
+
+    window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('pointerleave', onLeave);
+    stage.addEventListener('scroll', measure, { passive: true });
+    window.addEventListener('resize', measure);
+    gsap.ticker.add(tick);
+
+    gsap.from(pieces, { autoAlpha: 0, y: 26, duration: 0.7, ease: 'needle', stagger: { amount: 0.5, from: 'start' } });
+
+    return function () {
+      gsap.ticker.remove(tick);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerleave', onLeave);
+      stage.removeEventListener('scroll', measure);
+      window.removeEventListener('resize', measure);
+      document.body.classList.remove('is-dark');
+    };
+  }
+
+  /* =====================================================
+     2. HOJA DE CONTACTOS
+     ===================================================== */
+
+  function buildContact(style) {
+    stage.className = 'stage';
+
+    var grid = document.createElement('div');
+    grid.className = 'contact';
+    var frames = style.items.map(function (item, i) {
+      var frame = document.createElement('figure');
+      frame.className = 'frame';
+      frame.appendChild(makePiece(style, item, i));
+      var no = document.createElement('figcaption');
+      no.className = 'frame-no';
+      no.textContent = String(i + 1).padStart(2, '0') + ' · ' + style.short;
+      frame.appendChild(no);
+      grid.appendChild(frame);
+      return frame;
+    });
+    stage.appendChild(grid);
+
+    if (!reduced) {
+      gsap.from(frames, { autoAlpha: 0, y: 22, duration: 0.6, ease: 'needle', stagger: { amount: 0.5 } });
+    }
+    return function () {};
+  }
+
+  /* =====================================================
+     3. TIRA HORIZONTAL
+     ===================================================== */
+
+  function buildStrip(style) {
+    stage.className = 'stage no-scroll';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'strip-wrap';
+    var strip = document.createElement('div');
+    strip.className = 'strip';
+    var pieces = style.items.map(function (item, i) {
+      var p = makePiece(style, item, i);
+      strip.appendChild(p);
+      return p;
+    });
+    wrap.appendChild(strip);
+    stage.appendChild(wrap);
+
+    if (reduced) {
+      wrap.style.overflowX = 'auto';
+      return function () {};
+    }
+
+    var x = 0, minX = 0;
+    function bounds() { minX = Math.min(0, wrap.clientWidth - strip.scrollWidth); }
+    bounds();
+    window.addEventListener('resize', bounds);
+
+    var setX = gsap.quickSetter(strip, 'x', 'px');
+    var setSkew = gsap.quickSetter(pieces, 'skewX', 'deg');
+    var setScale = gsap.quickSetter(pieces, 'scaleY');
+    var current = 0, velocity = 0;
+
+    function tick() {
+      var prev = current;
+      current += (x - current) * 0.11;
+      velocity = current - prev;
+      setX(current);
+      // La inercia deforma las piezas: es lo que da sensación de peso
+      setSkew(gsap.utils.clamp(-14, 14, velocity * 0.22));
+      setScale(1 - Math.min(0.09, Math.abs(velocity) * 0.0012));
+    }
+    gsap.ticker.add(tick);
+
+    // Rueda y arrastre con listeners nativos. Observer haría lo mismo, pero
+    // así el recorrido es directo y se puede probar sin depender de él.
+    function onWheel(e) {
+      e.preventDefault();
+      var delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      x = gsap.utils.clamp(minX, 0, x - delta * 1.4);
+    }
+
+    var dragging = false, lastX = 0;
+    function onDown(e) {
+      dragging = true; lastX = e.clientX;
+      try { wrap.setPointerCapture(e.pointerId); } catch (err) { /* ratón sin captura */ }
+    }
+    function onMove(e) {
+      if (!dragging) return;
+      x = gsap.utils.clamp(minX, 0, x + (e.clientX - lastX) * 1.6);
+      lastX = e.clientX;
+    }
+    function onUp(e) {
+      dragging = false;
+      try { wrap.releasePointerCapture(e.pointerId); } catch (err) { /* idem */ }
+    }
+
+    wrap.addEventListener('wheel', onWheel, { passive: false });
+    wrap.addEventListener('pointerdown', onDown);
+    wrap.addEventListener('pointermove', onMove);
+    wrap.addEventListener('pointerup', onUp);
+    wrap.addEventListener('pointercancel', onUp);
+
+    gsap.from(pieces, { autoAlpha: 0, xPercent: 14, duration: 0.8, ease: 'needle', stagger: 0.05 });
+
+    return function () {
+      wrap.removeEventListener('wheel', onWheel);
+      wrap.removeEventListener('pointerdown', onDown);
+      wrap.removeEventListener('pointermove', onMove);
+      wrap.removeEventListener('pointerup', onUp);
+      wrap.removeEventListener('pointercancel', onUp);
+      gsap.ticker.remove(tick);
+      window.removeEventListener('resize', bounds);
+    };
+  }
+
+  /* =====================================================
+     4. MOSAICO DE DETALLE
+     ===================================================== */
+
+  function buildDetail(style) {
+    document.body.classList.add('is-dark');
+    stage.className = 'stage';
+
+    var grid = document.createElement('div');
+    grid.className = 'detail';
+    var pieces = style.items.map(function (item, i) {
+      var p = makePiece(style, item, i);
+      grid.appendChild(p);
+      return p;
+    });
+    stage.appendChild(grid);
+
+    if (!reduced) {
+      gsap.from(pieces, { autoAlpha: 0, scale: 0.88, duration: 0.7, ease: 'needle', stagger: { amount: 0.5, from: 'random' } });
+    }
+    return function () { document.body.classList.remove('is-dark'); };
+  }
+
+  /* =====================================================
+     ORQUESTACIÓN
+     ===================================================== */
+
+  var TREATMENTS = [
+    { id: 'wall',    label: 'Muro oscuro',        build: buildWall,    hint: 'Mueve el cursor: el foco decide qué se enciende' },
+    { id: 'contact', label: 'Hoja de contactos',  build: buildContact, hint: 'Todo en gris; el color vuelve solo en la pieza que miras' },
+    { id: 'strip',   label: 'Tira horizontal',    build: buildStrip,   hint: 'Arrastra o usa la rueda: la inercia deforma las piezas' },
+    { id: 'detail',  label: 'Mosaico de detalle', build: buildDetail,  hint: 'La miniatura es solo tinta; el hover devuelve el contexto' }
+  ];
+
+  var currentTreatment = TREATMENTS[0];
+  var currentStyle = STYLES[0];
+  var destroy = null;
+
+  TREATMENTS.forEach(function (t) {
+    var b = document.createElement('button');
+    b.className = 'tab';
+    b.type = 'button';
+    b.textContent = t.label;
+    b.setAttribute('aria-pressed', String(t === currentTreatment));
+    b.addEventListener('click', function () {
+      currentTreatment = t;
+      tabsEl.querySelectorAll('.tab').forEach(function (x, i) {
+        x.setAttribute('aria-pressed', String(TREATMENTS[i] === t));
+      });
+      render();
+    });
+    tabsEl.appendChild(b);
+  });
+
+  STYLES.forEach(function (s, i) {
+    var o = document.createElement('option');
+    o.value = String(i);
+    o.textContent = s.name + ' (' + s.items.length + ')';
+    selectEl.appendChild(o);
+  });
+  selectEl.addEventListener('change', function () {
+    currentStyle = STYLES[Number(selectEl.value)];
+    render();
+  });
+
+  function render() {
+    if (destroy) destroy();
+    gsap.killTweensOf(stage.querySelectorAll('*'));
+    stage.innerHTML = '';
+    stage.scrollTop = 0;
+    hintEl.textContent = currentTreatment.hint;
+    destroy = currentTreatment.build(currentStyle);
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
