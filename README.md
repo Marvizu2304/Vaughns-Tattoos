@@ -16,14 +16,6 @@ HTML, CSS y JavaScript planos. **Sin build, sin dependencias que instalar.**
 - **Tally** para el formulario de reserva (embebido como iframe).
 - Fotos en WebP responsive (800w / 1600w) bajo `images/optimized/`.
 
-## Correr en local
-
-```bash
-npx -y serve -l 4173 -s .
-```
-
-El `-s` es importante: sirve `index.html` en cualquier ruta, que es lo que
-necesita el router. Sin él, solo funciona entrar por `/`.
 
 ## Estructura
 
