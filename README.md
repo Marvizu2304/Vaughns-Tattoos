@@ -1,41 +1,44 @@
 # Vaughn's Tattoos
 
-Sitio portafolio de **Vaughn Raffty L.** (VLR Inks), tatuador en Peoria,
-Illinois. Muestra su obra en cuatro estilos —Anime / Illustrative, Traditional,
-Black & Grey y Line Work—, explica el proceso de reserva y recibe solicitudes
-de cita por un formulario de Tally.
+Portfolio website for **Vaughn Raffty L.** (VLR Inks), a tattoo artist in Peoria,
+Illinois. It showcases his work in four styles—Anime/Illustrative, Traditional,
+Black & Gray, and Line Work—explains the booking process, and accepts
+appointment requests via a Tally form.
 
-En vivo: <https://www.vaughnstattoos.com>
+Live: <https://www.vaughnstattoos.com>
 
 ## Stack
 
-HTML, CSS y JavaScript planos. **Sin build, sin dependencias que instalar.**
+Flat HTML, CSS, and JavaScript. **No build, no dependencies to install.**
 
-- **GSAP 3.13** desde CDN para toda la animación (ScrollTrigger, ScrollSmoother,
+- **GSAP 3.13** from a CDN for all animation (ScrollTrigger, ScrollSmoother,
   SplitText, Flip, Observer, DrawSVG, CustomEase).
-- **Tally** para el formulario de reserva (embebido como iframe).
-- Fotos en WebP responsive (800w / 1600w) bajo `images/optimized/`.
+- **Tally** for the booking form (embedded as an iframe).
+- Responsive WebP images (800w / 1600w) under `images/optimized/`.
 
 
-## Estructura
+## Structure
 
 ```
-index.html      Las 5 páginas del sitio, una detrás de otra
-404.html        Copia de index.html (ver nota de abajo)
-style.css       Todos los estilos
+index.html      The site’s 5 pages, one after another
+404.html        Copy of index.html (see note below)
+style.css       All styles
 js/
-  core.js       Cursor, menú, botones magnéticos, scroll suave
-  pages.js      La animación de cada página
-  app.js        Router, transiciones y preloader
+  core.js       Cursor, menu, magnetic buttons, smooth scrolling
+  pages.js      Animation for each page
+  app.js        Router, transitions, and preloader
 images/
-  optimized/    Lo que el sitio realmente sirve
-prototypes/     Exploraciones de diseño, no forman parte del sitio
+  optimized/    What the site actually serves
+prototypes/     Design explorations; not part of the site
 ```
 
-Es una sola página con rutas reales: `/`, `/about`, `/styles`, `/booking` y
-`/book`. El router intercepta los clics y cambia de página sin recargar.
+It is a single page with real routes: `/`, `/about`, `/styles`, `/booking`, and
+`/book`. The router intercepts clicks and switches pages without reloading.
 
 
 ---
 
-Diseño y desarrollo: [Maximiliano Arvizu](https://www.linkedin.com/in/maximiliano-f-arvizu-villarreal/)
+Design and development: [Maximiliano Arvizu](https://www.linkedin.com/in/maximiliano-f-arvizu-villarreal/)
+
+
+Translated with DeepL.com (free version)
