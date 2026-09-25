@@ -43,16 +43,6 @@ prototypes/     Exploraciones de diseño, no forman parte del sitio
 Es una sola página con rutas reales: `/`, `/about`, `/styles`, `/booking` y
 `/book`. El router intercepta los clics y cambia de página sin recargar.
 
-## Antes de subir cambios
-
-Si tocaste `index.html`, hay que regenerar su copia o las rutas profundas
-seguirán sirviendo la versión vieja:
-
-```bash
-cp index.html 404.html
-```
-
-Los detalles de despliegue por plataforma están en [DEPLOY.md](DEPLOY.md).
 
 ---
 
