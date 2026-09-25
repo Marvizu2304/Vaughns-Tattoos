@@ -258,6 +258,7 @@
         var workTitle  = root.querySelector('.work-title');
         var workCount  = root.querySelector('.work-count');
         var backBtn    = root.querySelector('.back-btn');
+        var workBook   = root.querySelector('.work-book');
         var stripEl    = root.querySelector('.work-strip');
         var track      = root.querySelector('.strip-track');
         var grid       = track;
@@ -291,6 +292,12 @@
                 ease: 'needle',
                 stagger: 0.08
             }, 0.2);
+
+            var indexCta = root.querySelector('.index-cta');
+            if (indexCta) {
+                gsap.set(indexCta, { autoAlpha: 1 });
+                tl.from(indexCta, { autoAlpha: 0, y: 20, duration: 0.6 }, 0.55);
+            }
 
             return tl;
         });
@@ -638,7 +645,7 @@
 
             gsap.timeline({ onComplete: VRL.refresh })
                 .to(workTitle, { x: 0, y: 0, duration: 0.85, ease: 'power3.inOut' }, 0)
-                .fromTo([backBtn, workCount], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.2)
+                .fromTo([backBtn, workCount, workBook], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.2)
                 // Solo autoAlpha: la x la lleva el bucle y un tween encima
                 // pelearía con ella.
                 .fromTo(shown,
@@ -679,7 +686,7 @@
                 .to(strip.list, {
                     autoAlpha: 0, duration: 0.4, ease: 'power2.in', stagger: 0.03
                 }, 0)
-                .to([workTitle, backBtn, workCount, root.querySelector('.strip-hint')],
+                .to([workTitle, backBtn, workCount, workBook, root.querySelector('.strip-hint')],
                     { autoAlpha: 0, duration: 0.3 }, 0.15);
         }
 
@@ -966,7 +973,32 @@
             var line = root.querySelector('.booking-progress path');
             var steps = Array.prototype.slice.call(root.querySelectorAll('.step'));
 
+            /* El CSS ya la estira a toda la columna; aquí se ajusta para que
+               empiece y acabe en el centro de los círculos primero y último,
+               en vez de sobresalir por debajo de la última tarjeta. */
+            function placeLine() {
+                var svg = root.querySelector('.booking-progress');
+                var host = root.querySelector('.booking-steps');
+                if (!svg || !host || !steps.length) return;
+                if (getComputedStyle(svg).display === 'none') return;
+
+                var first = steps[0].querySelector('.step-number');
+                var last = steps[steps.length - 1].querySelector('.step-number');
+                if (!first || !last) return;
+
+                var hostTop = host.getBoundingClientRect().top;
+                var a = first.getBoundingClientRect();
+                var b = last.getBoundingClientRect();
+                var top = a.top - hostTop + a.height / 2;
+                var bottom = b.top - hostTop + b.height / 2;
+
+                svg.style.top = top + 'px';
+                svg.style.height = Math.max(0, bottom - top) + 'px';
+            }
+
             if (line && window.DrawSVGPlugin && steps.length) {
+                placeLine();
+
                 gsap.fromTo(line,
                     { drawSVG: '0% 0%' },
                     {
@@ -976,7 +1008,11 @@
                             trigger: '.booking-steps',
                             start: 'top 70%',
                             end: 'bottom 85%',
-                            scrub: 0.6
+                            scrub: 0.6,
+                            // Colgado de este trigger y no de ScrollTrigger.addEventListener:
+                            // mount() recrea el módulo en cada visita, y un listener global
+                            // se iría apilando. Este muere con el mm.revert() del unmount.
+                            onRefreshInit: placeLine
                         }
                     });
             }

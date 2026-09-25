@@ -820,12 +820,59 @@ nav {
    STYLES — MOSAICO DE DETALLE
    ========================================================= */
 
+/* CTA al pie del índice: cerrar la lista de estilos con una salida a reserva */
+.index-cta {
+    margin-top: clamp(48px, 7vw, 88px);
+    padding-top: clamp(32px, 4vw, 52px);
+    border-top: 1px solid var(--ink-10);
+    text-align: center;
+}
+
+.index-cta p {
+    color: var(--text-muted);
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+}
+
+.index-cta .btn-magnetic {
+    margin-top: 24px;
+}
+
 .work-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
     margin-bottom: 10px;
+}
+
+.work-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2.2vw, 30px);
+}
+
+/* La tira se queda con la rueda del ratón (mueve las piezas en horizontal),
+   así que en desktop el botón del pie queda fuera de alcance: este vive en la
+   cabecera, visible desde el momento en que se abre el estilo. */
+.work-book {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--bg-color);
+    border: 1px solid var(--accent);
+    border-radius: 50px;
+    padding: 11px 26px;
+    transition: background-color var(--dur-fast) var(--easing),
+                color var(--dur-fast) var(--easing);
+}
+
+.work-book:hover,
+.work-book:focus-visible {
+    background: var(--accent);
+    color: var(--text-main);
 }
 
 .back-btn {
@@ -1020,12 +1067,18 @@ nav {
     padding-left: 92px;
 }
 
-/* Línea de tinta que se traza con el scroll */
+/* Línea de tinta que se traza con el scroll.
+
+   Un <svg> es un elemento reemplazado: con `top` y `bottom` pero sin `height`,
+   la altura se resuelve a la intrínseca del viewBox (100px) y el `bottom` se
+   ignora, así que la línea quedaba como un muñón de 100px sobre el paso 1.
+   Necesita una altura explícita para estirarse. El JS la afina después para
+   que vaya del centro del primer círculo al del último. */
 .booking-progress {
     position: absolute;
     left: 33px;
     top: 12px;
-    bottom: 12px;
+    height: calc(100% - 24px);
     width: 4px;
     overflow: visible;
     pointer-events: none;
@@ -1415,6 +1468,12 @@ footer {
     .lightbox-next { right: 8px; }
 
     .row-count {
+        display: none;
+    }
+
+    /* En móvil el scroll vertical no lo captura la tira (touch-action: pan-y),
+       así que el botón del pie sí se alcanza y la cabecera no se recarga. */
+    .work-book {
         display: none;
     }
 }
